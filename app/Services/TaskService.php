@@ -2,27 +2,29 @@
 
 namespace App\Services;
 
-use Carbon\Carbon;
+use App\Contracts\TaskRepositoryInterface;
+use App\DTOs\UserRegisterDTO;
 use App\Models\Task;
 use App\Models\User;
-use App\DTOs\UserRegisterDTO;
-use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
-use App\Contracts\TaskRepositoryInterface;
+use Illuminate\Support\Facades\Hash;
 
 class TaskService
 {
-    public function __construct(private readonly TaskRepositoryInterface $taskRepository) {}
+    public function __construct(
+        private readonly TaskRepositoryInterface $taskRepository
+    ) {}
 
     public function getAllTasks()
     {
         return $this->taskRepository->getUserTasks(auth()->id());
     }
 
-    public function cacheTasks($tasks)
+    public function cacheTasks(): mixed
     {
-        return Cache::remember("task_list_user_" . auth()->id(), now()->addMinutes(10), function () use ($tasks) {
-            return $tasks;
+        return Cache::remember('task_list_user_' . auth()->id(), now()->addMinutes(10), function () {
+            return $this->getAllTasks();
         });
     }
 
@@ -70,6 +72,6 @@ class TaskService
 
     public function removeCache()
     {
-        Cache::forget("task_list_user_" . auth()->id());
+        Cache::forget('task_list_user_' . auth()->id());
     }
 }

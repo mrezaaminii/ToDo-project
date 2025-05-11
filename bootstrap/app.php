@@ -20,20 +20,20 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        $exceptions->render(function (Throwable $e, Request $request) {
-            return match (true) {
-                $e instanceof AuthenticationException =>
-                    General::response(false, null, 'Not Authenticated', true, 401),
+        // $exceptions->render(function (Throwable $e, Request $request) {
+        //     return match (true) {
+        //         $e instanceof AuthenticationException =>
+        //             General::response(false, null, 'Not Authenticated', true, 401),
 
-                $e instanceof ValidationException =>
-                    General::response(false, null, $e->getMessage(), true, 422),
+        //         $e instanceof ValidationException =>
+        //             General::response(false, null, $e->getMessage(), true, 422),
 
-                $e instanceof NotFoundHttpException =>
-                    General::response(false, null, 'Route not found', true, 404),
+        //         $e instanceof NotFoundHttpException =>
+        //             General::response(false, null, 'Route not found', true, 404),
 
-                default =>
-                    General::response(false, null, 'Internal Server Error', true, 503),
-            };
-        });
+        //         default =>
+        //             General::response(false, null, 'Internal Server Error', true, 503),
+        //     };
+        // });
     })
     ->create();

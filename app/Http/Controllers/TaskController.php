@@ -18,9 +18,7 @@ class TaskController extends Controller
 
     public function index()
     {
-        $tasks = $this->taskService->getAllTasks();
-
-        $cachedTasks = $this->taskService->cacheTasks($tasks);
+        $cachedTasks = $this->taskService->cacheTasks();
 
         return General::response(true, TaskResource::collection($cachedTasks), 'List of tasks');
     }
